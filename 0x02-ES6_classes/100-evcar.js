@@ -1,13 +1,18 @@
 #!/usr/bin/node
-import Car from './10-car';
 
-export default class EVCar extends Car {
+import Car from './10-car.js';
+
+class EVCar extends Car {
   constructor(brand, motor, color, range) {
     super(brand, motor, color);
     this._range = range;
   }
 
-  static get [Symbol.species]() {
-    return Car;
+  cloneCar() {
+    const clonedCar = super.cloneCar();
+    clonedCar._range = undefined;
+    return clonedCar;
   }
 }
+
+export default EVCar;
