@@ -1,23 +1,45 @@
 #!/usr/bin/node
 const http = require('http');
-const { countStudents } = require('./3-read_file_async');
+const fs = require('fs');
 
-const app = http.createServer(async (req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  
-  if (req.url === '/') {
+const app = http.createServer((req, res) => {
+  const url = req.url;
+
+  if (url === '/') {
+    res.writeHead(200, {'Content-Type': 'text/plain'});
     res.end('Hello Holberton School!');
-  } else if (req.url === '/students') {
+  } else if (url === '/students') {
+    res.writeHead(200, {'Content-Type': 'text/plain'});
     res.write('This is the list of our students\n');
-    try {
-      const data = await countStudents(process.argv[2]);
-      res.end(data);
-    } catch (error) {
-      res.end(error.message);
-    }
+
+    const db = process.argv[2];
+    fs.readFile(db, 'utf8', (err, data) => {
+      if (err) {
+        res.end('Cannot load the database');
+      } else {
+        let lines = data.split('\n').filter((line) => line.trim() !== '');
+        lines = lines.slice(1);
+        res.write(`Number of students: ${lines.length}\n`);
+
+        const fields = {};
+        for (const line of lines) {
+          const [firstname, lastname, age, field] = line.split(',');
+          if (field) {
+            if (!fields[field]) fields[field] = [];
+            fields[field].push(firstname);
+          }
+        }
+        for (const [field, students] of Object.entries(fields)) {
+          res.write(
+            `Number of students in ${field}: ${students.length}. List: ${students.join(', ')}\n`
+          );
+        }
+        res.end();
+      }
+    });
   } else {
-    res.statusCode = 404;
-    res.end('Not found');
+    res.writeHead(404);
+    res.end();
   }
 });
 
