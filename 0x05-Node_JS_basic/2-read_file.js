@@ -4,22 +4,20 @@ const fs = require('fs');
 function countStudents(path) {
   try {
     const data = fs.readFileSync(path, 'utf8');
-    let lines = data.split('\n').filter((line) => line.trim() !== '');
-    lines = lines.slice(1);
-    console.log(`Number of students: ${lines.length}`);
+    const lines = data.split('\n').filter(line => line.trim() !== '');
+    const students = lines.slice(1);
+    
+    console.log(`Number of students: ${students.length}`);
 
     const fields = {};
-    for (const line of lines) {
-      const [firstname, lastname, age, field] = line.split(',');
-      if (field) {
-        if (!fields[field]) fields[field] = [];
-        fields[field].push(firstname);
-      }
-    }
-    for (const [field, students] of Object.entries(fields)) {
-      console.log(
-        `Number of students in ${field}: ${students.length}. List: ${students.join(', ')}`
-      );
+    students.forEach(student => {
+      const [firstName, , , field] = student.split(',');
+      if (!fields[field]) fields[field] = [];
+      fields[field].push(firstName);
+    });
+
+    for (const [field, names] of Object.entries(fields)) {
+      console.log(`Number of students in ${field}: ${names.length}. List: ${names.join(', ')}`);
     }
   } catch (error) {
     throw new Error('Cannot load the database');
