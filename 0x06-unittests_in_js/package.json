@@ -1,7 +1,7 @@
 {
   "name": "0x06-unittests_in_js",
   "version": "1.0.0",
-  "description": "",
+  "description": "This project demonstrates how to write unit tests in JavaScript using Mocha, Chai, and Sinon. It covers basic unit testing, using spies and stubs, handling asynchronous code, and integration testing with Express.js.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,5 +14,8 @@
     "mocha": "^10.7.3",
     "request": "^2.88.2",
     "sinon": "^19.0.2"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
   }
 }
