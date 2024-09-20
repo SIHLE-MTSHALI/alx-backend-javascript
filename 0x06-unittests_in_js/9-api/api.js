@@ -1,5 +1,4 @@
-#!/usr/bin/env node
-
+#!/usr/bin/node
 const express = require('express');
 
 const app = express();
@@ -9,7 +8,7 @@ app.get('/', (req, res) => {
   res.send('Welcome to the payment system');
 });
 
-app.get('/cart/:id([0-9]+)', (req, res) => {
+app.get('/cart/:id(\\d+)', (req, res) => {
   res.send(`Payment methods for cart ${req.params.id}`);
 });
 
